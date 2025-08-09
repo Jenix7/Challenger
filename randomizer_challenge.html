@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randomizador de Retos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.1s ease;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        .reto-container {
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .reto-text {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: white;
+        }
+
+        .instruccion {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            opacity: 0.7;
+            text-align: center;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="reto-container">
+        <div class="reto-text" id="retoText">Mantén pulsado para randomizar</div>
+    </div>
+    
+    <div class="instruccion">Mantén pulsado en cualquier lugar de la pantalla</div>
+
+    <script>
+        const retos = [
+            "Haz 20 flexiones",
+            "Canta tu canción favorita",
+            "Baila por 30 segundos",
+            "Haz 15 sentadillas",
+            "Imita a tu animal favorito",
+            "Di un trabalenguas 3 veces",
+            "Haz una plancha por 30 segundos",
+            "Cuenta un chiste",
+            "Haz 10 saltos de tijera",
+            "Dibuja algo en el aire",
+            "Haz una pose de yoga",
+            "Corre en el lugar por 20 segundos",
+            "Di el abecedario al revés",
+            "Haz 5 burpees",
+            "Imita a tu personaje favorito",
+            "Haz una mueca graciosa",
+            "Cuenta hasta 50 de 3 en 3",
+            "Haz estiramientos por 1 minuto",
+            "Di 5 palabras que empiecen por 'P'",
+            "Haz el pino por 10 segundos"
+        ];
+
+        const colores = [
+            '#E74C3C', '#9B59B6', '#3498DB', '#1ABC9C', '#F39C12',
+            '#E67E22', '#34495E', '#2C3E50', '#8E44AD', '#2980B9',
+            '#16A085', '#27AE60', '#D35400', '#C0392B', '#7F8C8D'
+        ];
+
+        let isRandomizing = false;
+        let randomInterval;
+        let currentRetoIndex = 0;
+        let currentColorIndex = 0;
+
+        const retoText = document.getElementById('retoText');
+        const body = document.body;
+
+        function getRandomReto() {
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * retos.length);
+            } while (newIndex === currentRetoIndex && retos.length > 1);
+            currentRetoIndex = newIndex;
+            return retos[newIndex];
+        }
+
+        function getRandomColor() {
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * colores.length);
+            } while (newIndex === currentColorIndex && colores.length > 1);
+            currentColorIndex = newIndex;
+            return colores[newIndex];
+        }
+
+        function updateDisplay() {
+            const reto = getRandomReto();
+            const color = getRandomColor();
+            
+            retoText.textContent = reto;
+            body.style.backgroundColor = color;
+        }
+
+        function startRandomizing() {
+            if (isRandomizing) return;
+            isRandomizing = true;
+            
+            randomInterval = setInterval(() => {
+                updateDisplay();
+            }, 100); // Cambia cada 100ms para que sea súper rápido
+        }
+
+        function stopRandomizing() {
+            if (!isRandomizing) return;
+            isRandomizing = false;
+            clearInterval(randomInterval);
+        }
+
+        // Eventos para mouse
+        body.addEventListener('mousedown', startRandomizing);
+        body.addEventListener('mouseup', stopRandomizing);
+        body.addEventListener('mouseleave', stopRandomizing);
+
+        // Eventos para touch (móvil)
+        body.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startRandomizing();
+        });
+        
+        body.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            stopRandomizing();
+        });
+
+        body.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            stopRandomizing();
+        });
+
+        // Configuración inicial
+        body.style.backgroundColor = colores[0];
+    </script>
+</body>
+</html>
