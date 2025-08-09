@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,35 +50,148 @@
         }
     </style>
 </head>
+
 <body>
     <div class="reto-container">
         <div class="reto-text" id="retoText">Mantén pulsado para randomizar</div>
     </div>
-    
+
     <div class="instruccion">Mantén pulsado en cualquier lugar de la pantalla</div>
 
     <script>
         const retos = [
-            "Haz 20 flexiones",
-            "Canta tu canción favorita",
-            "Baila por 30 segundos",
-            "Haz 15 sentadillas",
-            "Imita a tu animal favorito",
-            "Di un trabalenguas 3 veces",
-            "Haz una plancha por 30 segundos",
-            "Cuenta un chiste",
-            "Haz 10 saltos de tijera",
-            "Dibuja algo en el aire",
-            "Haz una pose de yoga",
-            "Corre en el lugar por 20 segundos",
-            "Di el abecedario al revés",
-            "Haz 5 burpees",
-            "Imita a tu personaje favorito",
-            "Haz una mueca graciosa",
-            "Cuenta hasta 50 de 3 en 3",
-            "Haz estiramientos por 1 minuto",
-            "Di 5 palabras que empiecen por 'P'",
-            "Haz el pino por 10 segundos"
+            "Enseñar la foto más embarazosa de tu teléfono",
+            "Cambiar tu foto de WhatsApp y poner una que salgas muy mal",
+            "Enseñar las últimas cinco personas a las que enviaste mensajes de texto",
+            "Declararte a un desconocido de la fiesta",
+            "Cortarte 4 cm de pelo",
+            "Hacerte una foto en una pose ridícula y publicarla en tus redes sociales",
+            "Dejar que el resto del grupo envíe un MD a alguien de tu cuenta de Instagram",
+            "Comer salsa picante, una cucharada",
+            "Llamar a un amigo que no esté presente y convencerlo de una historia absurda",
+            "Hacer 25 flexiones",
+            "Mandar un selfie a una persona aleatoria de Instagram o WhatsApp",
+            "Mantener dos cubitos de hielo en la boca hasta que se derritan",
+            "Decir 3 cosas malas y 3 buenas de la persona que te ha tocado como pareja",
+            "Hacer una videollamada a un número aleatorio",
+            "Dar un masaje en los pies a la persona de tu derecha",
+            "Poner 7 líquidos diferentes en un vaso y beberlo",
+            "Hacer un baile erótico a la persona que elijas",
+            "Preguntarle a alguien de la fiesta si creen que eres atractivo/a",
+            "Abrazar a un desconocido sin hablar ni una palabra",
+            "Gritar '¡Te has enamorado!' muy fuerte y varias veces",
+            "Llamar a tu pareja y decirle que estás embarazada",
+            "Beberte cuatro vasos de agua seguidos",
+            "Mandar un emoji sugerente a tu jefe",
+            "Echarte jabón de manos en el pelo",
+            "Gemir durante un minuto",
+            "Ronronear como un gato durante un minuto",
+            "Grabar un gemido y mandarlo como mensaje de voz",
+            "Vaciar tu cartera/monedero y enseñar a todos lo que hay dentro",
+            "Tirarte a una piscina sin ropa",
+            "Empezar a cantarle una canción a un camarero desconocido sin decirle nada más",
+            "Lamer la mejilla del jugador que quieras",
+            "Publicar un story con un selfie horrible",
+            "Ir al micro y gritar algo vergonzoso",
+            "Hacer tantas flexiones como puedas en un minuto",
+            "Fingir ser la persona de tu derecha durante 10 minutos",
+            "Comer un bocadillo sin usar las manos",
+            "Beber una copa sin usar las manos",
+            "Intentar meter todo el puño en la boca",
+            "Contar a todos una historia embarazosa sobre ti mismo",
+            "Oler la axila de un desconocido",
+            "Morder la oreja a un desconocido",
+            "Hablar con acento mexicano durante 10 minutos",
+            "Mandar un WhatsApp a alguien y borrarlo al segundo",
+            "Aullar como un lobo durante dos minutos",
+            "Ladrar cada vez que alguien te pregunte algo durante la noche",
+            "Hacer un striptease a tu pareja",
+            "Cantar una canción entera con el micro",
+            "Desplazarte por tu agenda telefónica hasta que alguien te diga que pares",
+            "Ponerte la ropa al revés durante 1 hora",
+            "Acabarte la bebida sin parar, sin responsabilidad",
+            "Hacer reír a un desconocido",
+            "Imitar a un amigo delante suyo",
+            "Estar sin hablar 20 minutos",
+            "Decir dos verdades y una mentira, y el grupo tiene que adivinar la mentira",
+            "Mostrar tu talento secreto",
+            "Contestar con sí a todo durante 1 hora",
+            "Contestar con no a todo durante 1 hora",
+            "Hablar con acento andaluz durante 1 hora",
+            "Conversar al menos 5 minutos con un desconocido",
+            "Mantener una mirada intensa y seductora con alguien durante 1 minuto",
+            "Robar una copa a alguien sin que se entere",
+            "Llenar tu boca de bebida y hacer gárgaras mientras respondes",
+            "Sonreír todo lo que puedas y mantenerlo durante 2 minutos",
+            "Insultar de forma personalizada a todos los presentes",
+            "Tomarte una copa sin parar",
+            "Pasarte la noche sin usar el móvil",
+            "Pretender que eres famoso/a con desconocidos",
+            "Salir a la fiesta y pretender ser famoso/a",
+            "Pedir unas monedas a alguien desconocido",
+            "Preguntar a un desconocido si le conoces de algo",
+            "Preguntar a un desconocido si puedes dormir en su casa",
+            "Invitar a una copa al primero que pase por la fiesta",
+            "Conseguir una copa gratis en la fiesta",
+            "Mandarle una foto de una peineta a tu ex",
+            "Escribir un email a tu jefe en inglés",
+            "Ponerte a hablar con un árbol durante cinco minutos",
+            "Llamar a un número aleatorio y decir que le ha tocado un premio",
+            "Llamar a tu ex y decirle lo primero que se te ocurra",
+            "Llamar a tu crush y decirle que te gusta",
+            "Elegir un jugador y dejar que te haga cosquillas durante un minuto",
+            "Hacer un concurso de quién dice más palabrotas contra el jugador que elijas",
+            "Hacerte un selfie con la primera persona que pase a tu lado",
+            "Preguntar a un desconocido de la fiesta dónde está el baño en inglés",
+            "Llamar a tu madre y decirle que la quieres",
+            "Hablar toda la noche en un idioma inventado",
+            "Hacerte amigo/a del DJ que pinche en la fiesta",
+            "Pedir la canción más ridícula que se te ocurra en la fiesta",
+            "Invitar a bailar a un desconocido",
+            "Estar dos horas con la boca abierta",
+            "Beberte una cerveza en menos de 30 segundos",
+            "Publicar una foto en la que salgas mal en Instagram durante 2 minutos",
+            "Enseñar el último vídeo que has visto en YouTube",
+            "Mandar un mensaje a uno de tus ex insultándolo",
+            "Invitar a salir a la persona que te gusta",
+            "Tomarte tres chupitos seguidos",
+            "Grabar un vídeo cantando pasionalmente en la ducha",
+            "Mandar un emoji a tu jefe",
+            "Hacer ver que estás teniendo una conversación vergonzosa por teléfono",
+            "Correr a la pata coja durante dos minutos sin dejar de decir el abecedario",
+            "Abrazar a la primera persona que encuentres en la fiesta",
+            "Empezar a cantarle una canción a alguien de la fiesta",
+            "Caminar de espaldas durante 2 minutos en la fiesta",
+            "Dar 10 vueltas sobre ti mismo y luego ponerse a correr en línea recta",
+            "Hacer una lista con las partes del cuerpo que más te gustan de otra persona",
+            "Mandar un mensaje sólo con emojis, otra persona tendrá que decodificarlos",
+            "Grabarte cantando una canción vergonzosa que te guste",
+            "Mandar un audio a alguien haciendo ver que estás teniendo un orgasmo",
+            "Comentar una foto de Instagram de algún conocido con algo picante",
+            "Contar un sueño erótico que hayas tenido y que recuerdes",
+            "Hacerte pasar por otra persona toda la noche",
+            "Cantar a alguien una canción romántica a capela",
+            "Pedir una foto divertida a alguien de la fiesta",
+            "Dejar que alguien te vista como quiera durante las siguientes rondas",
+            "Preguntar a alguien random qué es lo más extraño que han hecho nunca",
+            "Tomar un vaso de agua sin emplear tus manos",
+            "Crear y recitar un poema sobre la persona a tu izquierda",
+            "Seguir a alguien sin que se dé cuenta durante 2 minutos",
+            "Quedarte inmóvil durante 2 minutos mientras los demás intentan hacerte reír",
+            "Colocar una galleta en tu frente y intentar comerla moviendo sólo tu cara",
+            "Tomar una bebida con una mezcla de tres ingredientes que elijan tus amigos",
+            "Quitar una prenda a alguien con los dientes",
+            "Bajarle el cierre del pantalón a otro jugador",
+            "Moverte como una serpiente durante dos minutos",
+            "Imitar la portada de una revista famosa",
+            "Cantar con agua en la boca",
+            "Dejar que alguien te haga un peinado loco y lúcelo durante 30 minutos",
+            "Llamar a un ser querido y hacerle una confesión falsa que el grupo acordó",
+            "Utilizar el baño con la puerta abierta durante la fiesta",
+            "Ofrecer un masaje a alguien de la fiesta",
+            "Mandar un audio a un contacto aleatorio gimiendo",
+            "Inflar un globo hasta que explote",
+            "Colarte en un hotel"
         ];
 
         const colores = [
@@ -115,7 +229,7 @@
         function updateDisplay() {
             const reto = getRandomReto();
             const color = getRandomColor();
-            
+
             retoText.textContent = reto;
             body.style.backgroundColor = color;
         }
@@ -123,7 +237,7 @@
         function startRandomizing() {
             if (isRandomizing) return;
             isRandomizing = true;
-            
+
             randomInterval = setInterval(() => {
                 updateDisplay();
             }, 100); // Cambia cada 100ms para que sea súper rápido
@@ -145,7 +259,7 @@
             e.preventDefault();
             startRandomizing();
         });
-        
+
         body.addEventListener('touchend', (e) => {
             e.preventDefault();
             stopRandomizing();
@@ -160,4 +274,5 @@
         body.style.backgroundColor = colores[0];
     </script>
 </body>
+
 </html>
