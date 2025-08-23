@@ -48,10 +48,21 @@
             text-align: center;
             padding: 0 20px;
         }
+
+        .zona-truco {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 25vh;
+            z-index: 10;
+        }
     </style>
 </head>
 
 <body>
+    <div class="zona-truco"></div>
+
     <div class="reto-container">
         <div class="reto-text" id="retoText">Mantén pulsado para randomizar</div>
     </div>
@@ -194,6 +205,8 @@
             "Colarte en un hotel"
         ];
 
+        const retoTrucado = "Besar a la persona que se te indique";
+
         const colores = [
             '#E74C3C', '#9B59B6', '#3498DB', '#1ABC9C', '#F39C12',
             '#E67E22', '#34495E', '#2C3E50', '#8E44AD', '#2980B9',
@@ -204,9 +217,11 @@
         let randomInterval;
         let currentRetoIndex = 0;
         let currentColorIndex = 0;
+        let trucazoActivado = false;
 
         const retoText = document.getElementById('retoText');
         const body = document.body;
+        const zonaTruco = document.querySelector('.zona-truco');
 
         function getRandomReto() {
             let newIndex;
@@ -247,16 +262,39 @@
             if (!isRandomizing) return;
             isRandomizing = false;
             clearInterval(randomInterval);
+
+            // Si el trucazo estaba activado, mostrar el reto trucado al final
+            if (trucazoActivado) {
+                const color = getRandomColor();
+                retoText.textContent = retoTrucado;
+                body.style.backgroundColor = color;
+                trucazoActivado = false; // Resetear el trucazo
+            }
         }
 
-        // Eventos para mouse
-        body.addEventListener('mousedown', startRandomizing);
+        // Función para detectar si el clic/touch está en la zona trucada
+        function estEnZonaTruco(event) {
+            const y = event.clientY || (event.touches && event.touches[0] ? event.touches[0].clientY : 0);
+            return y <= window.innerHeight * 0.25; // 25% superior
+        }
+
+        // Eventos unificados para mouse
+        body.addEventListener('mousedown', (e) => {
+            if (estEnZonaTruco(e)) {
+                trucazoActivado = true;
+            }
+            startRandomizing();
+        });
+
         body.addEventListener('mouseup', stopRandomizing);
         body.addEventListener('mouseleave', stopRandomizing);
 
-        // Eventos para touch (móvil)
+        // Eventos unificados para touch (móvil)
         body.addEventListener('touchstart', (e) => {
             e.preventDefault();
+            if (estEnZonaTruco(e)) {
+                trucazoActivado = true;
+            }
             startRandomizing();
         });
 
