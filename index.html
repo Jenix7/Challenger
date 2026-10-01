@@ -3,313 +3,1258 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Randomizador de Retos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#120a2e">
+    <meta name="color-scheme" content="dark">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="Challenger: mantén pulsado y deja que la suerte elija tu reto.">
+    <title>Challenger</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-1: #0b0620;
+            --bg-2: #1c0e42;
+            --bg-3: #2a0f3f;
+            --card-bg: rgba(255, 255, 255, 0.06);
+            --card-border: rgba(255, 255, 255, 0.14);
+            --text: #f6f3ff;
+            --muted: rgba(246, 243, 255, 0.62);
+            --muted-2: rgba(246, 243, 255, 0.4);
+            --suave: #35d08c;
+            --suave-bg: rgba(53, 208, 140, 0.16);
+            --picante: #ff9a3d;
+            --picante-bg: rgba(255, 154, 61, 0.16);
+            --leyenda: #c58bff;
+            --leyenda-bg: rgba(197, 139, 255, 0.18);
+            --accent: #ff3d81;
+            --accent-2: #8b2bff;
+            --radius-lg: 30px;
+            --radius-md: 18px;
+            --header-h: 58px;
+            --footer-h: 46px;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            overscroll-behavior: none;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            height: 100vh;
+            position: fixed;
+            inset: 0;
+            font-family: 'Outfit', 'Poppins', sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at 18% -8%, rgba(139, 43, 255, 0.45), transparent 45%),
+                radial-gradient(circle at 85% 110%, rgba(255, 61, 129, 0.35), transparent 50%),
+                linear-gradient(180deg, var(--bg-1), var(--bg-3) 60%, var(--bg-1));
+            overflow: hidden;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        /* ---------- Splash ---------- */
+        .splash {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.1s ease;
-            user-select: none;
-            overflow: hidden;
+            gap: 14px;
+            background: radial-gradient(circle at 50% 30%, var(--bg-3), var(--bg-1) 70%);
+            transition: opacity .35s ease, visibility .35s ease;
         }
 
-        .reto-container {
-            text-align: center;
-            padding: 20px;
-            width: 100%;
-            max-width: 400px;
+        .splash.splash-oculto {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
-        .reto-text {
-            font-size: 24px;
+        .splash-logo {
+            width: 84px;
+            height: 84px;
+            filter: drop-shadow(0 8px 24px rgba(139, 43, 255, .55));
+            animation: splash-pulse 1.1s ease-in-out infinite;
+        }
+
+        .splash-title {
+            font-family: 'Fredoka', 'Outfit', sans-serif;
+            font-size: 30px;
             font-weight: 600;
-            line-height: 1.4;
-            color: white;
+            letter-spacing: .5px;
         }
 
-        .instruccion {
+        .splash-sub {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        @keyframes splash-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        /* ---------- Layout shell ---------- */
+        .app {
             position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
-            opacity: 0.7;
-            text-align: center;
-            padding: 0 20px;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
         }
 
-        .zona-truco {
-            position: absolute;
+        .app-header {
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 25vh;
-            z-index: 10;
+            height: var(--header-h);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px;
+            background: rgba(11, 6, 32, 0.55);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            z-index: 40;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .brand-logo {
+            width: 26px;
+            height: 26px;
+            flex: none;
+        }
+
+        .brand-name {
+            font-family: 'Fredoka', 'Outfit', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: .3px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .icon-btn:active {
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .icon-btn svg {
+            width: 19px;
+            height: 19px;
+        }
+
+        .app-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: calc(var(--header-h) + 14px) 18px calc(var(--footer-h) + 14px);
+            width: 100%;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat-pill {
+            font-size: 12.5px;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--muted);
+            letter-spacing: .2px;
+        }
+
+        .stat-pill.racha {
+            color: #ffd27a;
+            background: rgba(255, 180, 60, 0.12);
+        }
+
+        /* ---------- Card ---------- */
+        .card-stage {
+            position: relative;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .reto-card {
+            position: relative;
+            width: 100%;
+            min-height: 260px;
+            border-radius: var(--radius-lg);
+            padding: 30px 26px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+            border: 1px solid var(--card-border);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            text-align: center;
+            overflow: hidden;
+            transition: background .08s linear;
+        }
+
+        .reto-card.girando {
+            animation: tarjeta-shake .22s ease-in-out infinite;
+        }
+
+        .reto-card.pop {
+            animation: tarjeta-pop .45s cubic-bezier(.22, 1.4, .36, 1);
+        }
+
+        @keyframes tarjeta-shake {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-1.4deg) scale(1.01); }
+            50% { transform: rotate(0deg) scale(0.995); }
+            75% { transform: rotate(1.4deg) scale(1.01); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+
+        @keyframes tarjeta-pop {
+            0% { transform: scale(0.88); }
+            55% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .nivel-chip {
+            font-size: 11.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            padding: 5px 13px;
+            border-radius: 999px;
+        }
+
+        .nivel-chip.s { color: var(--suave); background: var(--suave-bg); }
+        .nivel-chip.p { color: var(--picante); background: var(--picante-bg); }
+        .nivel-chip.l { color: var(--leyenda); background: var(--leyenda-bg); }
+
+        .reto-text {
+            font-size: clamp(19px, 5.4vw, 25px);
+            font-weight: 600;
+            line-height: 1.42;
+        }
+
+        .confetti-layer {
+            position: absolute;
+            inset: -20px;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .confeti-pieza {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 12px;
+            border-radius: 2px;
+            opacity: 0;
+            animation: confeti-vuelo .9s ease-out forwards;
+        }
+
+        @keyframes confeti-vuelo {
+            0% { opacity: 1; transform: translate(-50%, -50%) rotate(0deg) translate(0, 0); }
+            100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--rot)) translate(var(--dx), var(--dy)); }
+        }
+
+        .hint {
+            font-size: 13px;
+            color: var(--muted-2);
+            text-align: center;
+            padding: 0 10px;
+            min-height: 16px;
+        }
+
+        /* ---------- Resultado ---------- */
+        .resultado-botones {
+            display: flex;
+            gap: 12px;
+        }
+
+        .resultado-botones[hidden] {
+            display: none;
+        }
+
+        .btn-resultado {
+            border: none;
+            border-radius: 999px;
+            padding: 12px 20px;
+            font-family: inherit;
+            font-size: 14.5px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #0b0620;
+        }
+
+        .btn-hecho {
+            background: linear-gradient(135deg, #4ee6a0, #35d08c);
+        }
+
+        .btn-rajo {
+            background: linear-gradient(135deg, #ffd27a, #ff9a3d);
+        }
+
+        .btn-resultado:active {
+            transform: scale(0.96);
+        }
+
+        /* ---------- Historial ---------- */
+        .historial-toggle {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 6px 10px;
+        }
+
+        .chev {
+            display: inline-block;
+            transition: transform .2s ease;
+        }
+
+        .historial-toggle.abierto .chev {
+            transform: rotate(180deg);
+        }
+
+        .historial-panel {
+            width: 100%;
+            max-width: 380px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            max-height: 180px;
+            overflow-y: auto;
+            touch-action: pan-y;
+        }
+
+        .historial-panel.oculto {
+            display: none;
+        }
+
+        .historial-vacio {
+            font-size: 13px;
+            color: var(--muted-2);
+            text-align: center;
+            padding: 8px 0;
+        }
+
+        .historial-lista {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .historial-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 13px;
+        }
+
+        .historial-item .chip-mini {
+            flex: none;
+            font-size: 9.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 3px 7px;
+            border-radius: 999px;
+        }
+
+        .chip-mini.s { color: var(--suave); background: var(--suave-bg); }
+        .chip-mini.p { color: var(--picante); background: var(--picante-bg); }
+        .chip-mini.l { color: var(--leyenda); background: var(--leyenda-bg); }
+
+        .historial-item .texto {
+            flex: 1;
+            color: var(--muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .historial-item .resultado-icono {
+            flex: none;
+        }
+
+        /* ---------- Footer ---------- */
+        .app-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--footer-h);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 11.5px;
+            color: var(--muted-2);
+            background: rgba(11, 6, 32, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .version {
+            padding: 6px;
+            cursor: default;
+        }
+
+        /* ---------- Settings overlay ---------- */
+        .settings-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 80;
+            background: rgba(5, 2, 18, 0.72);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .settings-overlay.oculto {
+            display: none;
+        }
+
+        .settings-panel {
+            width: 100%;
+            max-width: 420px;
+            max-height: 86vh;
+            overflow-y: auto;
+            touch-action: pan-y;
+            background: linear-gradient(180deg, #1c1140, #130a30);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: none;
+            border-radius: 26px 26px 0 0;
+            padding: 18px 20px 26px;
+        }
+
+        .settings-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .settings-header h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .settings-grupo {
+            padding: 14px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .settings-grupo h3 {
+            font-size: 12.5px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: var(--muted-2);
+            margin-bottom: 10px;
+        }
+
+        .settings-fila {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14.5px;
+        }
+
+        .check-fila, .radio-fila {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 0;
+            font-size: 14px;
+        }
+
+        .secreto-nota {
+            font-size: 12px;
+            color: var(--muted-2);
+            margin-bottom: 8px;
+        }
+
+        #trucoCustomTexto {
+            width: 100%;
+            margin-top: 6px;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13px;
+            resize: vertical;
+            user-select: text;
+            -webkit-user-select: text;
+            touch-action: auto;
+        }
+
+        .settings-footer-nota {
+            text-align: center;
+            font-size: 11px;
+            color: var(--muted-2);
+            padding-top: 14px;
+        }
+
+        /* Switch */
+        .switch {
+            position: relative;
+            width: 42px;
+            height: 24px;
+            flex: none;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            transition: background .2s ease;
+            cursor: pointer;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            left: 3px;
+            top: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform .2s ease;
+        }
+
+        .switch input:checked + .slider {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        }
+
+        .switch input:checked + .slider::before {
+            transform: translateX(18px);
         }
     </style>
 </head>
 
 <body>
-    <div class="zona-truco"></div>
 
-    <div class="reto-container">
-        <div class="reto-text" id="retoText">Mantén pulsado para randomizar</div>
+    <div class="splash" id="splash">
+        <svg class="splash-logo" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="sbg" x1="0" y1="0" x2="192" y2="192" gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stop-color="#ff3d81" />
+                    <stop offset="0.55" stop-color="#8b2bff" />
+                    <stop offset="1" stop-color="#2d12ff" />
+                </linearGradient>
+                <linearGradient id="sbolt" x1="60" y1="20" x2="140" y2="175" gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stop-color="#fff6c8" />
+                    <stop offset="1" stop-color="#ffd23f" />
+                </linearGradient>
+            </defs>
+            <rect width="192" height="192" rx="42" fill="url(#sbg)" />
+            <path d="M106 18 L54 104 H88 L80 174 L140 82 H104 Z" fill="url(#sbolt)" stroke="#2d0a4e" stroke-width="4" stroke-linejoin="round" />
+        </svg>
+        <div class="splash-title">Challenger</div>
+        <div class="splash-sub">preparando tu próximo reto…</div>
     </div>
 
-    <div class="instruccion">Mantén pulsado en cualquier lugar de la pantalla</div>
+    <div class="app" id="app">
+
+        <header class="app-header">
+            <div class="brand">
+                <svg class="brand-logo" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="192" height="192" rx="42" fill="url(#sbg)" />
+                    <path d="M106 18 L54 104 H88 L80 174 L140 82 H104 Z" fill="url(#sbolt)" stroke="#2d0a4e" stroke-width="4" stroke-linejoin="round" />
+                </svg>
+                <span class="brand-name">Challenger</span>
+            </div>
+            <button type="button" class="icon-btn no-gesture" id="btnSettings" aria-label="Ajustes">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </button>
+        </header>
+
+        <main class="app-main">
+            <div class="stats-row">
+                <div class="stat-pill" id="contadorPill">Reto nº 0</div>
+                <div class="stat-pill racha" id="rachaPill">🔥 Racha 0</div>
+            </div>
+
+            <div class="card-stage">
+                <div class="reto-card" id="retoCard">
+                    <span class="nivel-chip s" id="nivelChip" hidden>Suave</span>
+                    <p class="reto-text" id="retoText">Mantén pulsado para randomizar</p>
+                </div>
+                <div class="confetti-layer" id="confettiLayer"></div>
+            </div>
+
+            <p class="hint" id="hintText">Mantén pulsado en cualquier parte de la pantalla</p>
+
+            <div class="resultado-botones no-gesture" id="resultadoBotones" hidden>
+                <button type="button" class="btn-resultado btn-hecho no-gesture" data-res="hecho">Hecho ✅</button>
+                <button type="button" class="btn-resultado btn-rajo no-gesture" data-res="rajo">Me rajo 🙈</button>
+            </div>
+
+            <button type="button" class="historial-toggle no-gesture" id="btnHistorial">
+                Historial <span class="chev">▾</span>
+            </button>
+            <div class="historial-panel no-gesture oculto" id="historialPanel">
+                <p class="historial-vacio" id="historialVacio">Todavía no hay retos en tu historial.</p>
+                <ul class="historial-lista" id="historialLista"></ul>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <span class="version no-gesture" id="versionTap">v2.4.1</span>
+            <span>· © Challenger Labs</span>
+        </footer>
+
+        <div class="settings-overlay no-gesture oculto" id="settingsOverlay">
+            <div class="settings-panel">
+                <div class="settings-header">
+                    <h2>Ajustes</h2>
+                    <button type="button" class="icon-btn" id="btnCerrarAjustes" aria-label="Cerrar ajustes">✕</button>
+                </div>
+
+                <div class="settings-grupo" style="border-top:none; padding-top:0;">
+                    <div class="settings-fila">
+                        <span>Sonido</span>
+                        <label class="switch"><input type="checkbox" id="toggleSonido"><span class="slider"></span></label>
+                    </div>
+                    <div class="settings-fila">
+                        <span>Vibración</span>
+                        <label class="switch"><input type="checkbox" id="toggleVibracion"><span class="slider"></span></label>
+                    </div>
+                </div>
+
+                <div class="settings-grupo">
+                    <h3>Categorías</h3>
+                    <label class="check-fila"><input type="checkbox" id="catSuave"><span class="chip-mini s">Suave</span></label>
+                    <label class="check-fila"><input type="checkbox" id="catPicante"><span class="chip-mini p">Picante</span></label>
+                    <label class="check-fila"><input type="checkbox" id="catLeyenda"><span class="chip-mini l">Leyenda</span></label>
+                </div>
+
+                <div class="settings-grupo" id="secretoGrupo" hidden>
+                    <h3>Reto especial</h3>
+                    <p class="secreto-nota">Puede aparecer en momentos muy concretos de la noche. Elige cuál.</p>
+                    <label class="radio-fila"><input type="radio" name="trucoPreset" value="0"><span>Besar a la persona que se te indique</span></label>
+                    <label class="radio-fila"><input type="radio" name="trucoPreset" value="1"><span>Dar un beso a la persona que te indiquen (sí, a esa)</span></label>
+                    <label class="radio-fila"><input type="radio" name="trucoPreset" value="2"><span>Intercambiar el nombre con la persona que te indiquen el resto de la noche</span></label>
+                    <label class="radio-fila"><input type="radio" name="trucoPreset" value="3"><span>Pedirle el número a la persona que te indiquen con la excusa más mala posible</span></label>
+                    <label class="radio-fila"><input type="radio" name="trucoPreset" value="custom"><span>Personalizado:</span></label>
+                    <textarea id="trucoCustomTexto" rows="2" placeholder="Escribe tu propio reto especial…"></textarea>
+                </div>
+
+                <p class="settings-footer-nota">Challenger v2.4.1 — © Challenger Labs</p>
+            </div>
+        </div>
+
+    </div>
 
     <script>
-        const retos = [
-            "Enseñar la foto más embarazosa de tu teléfono",
-            "Cambiar tu foto de WhatsApp y poner una que salgas muy mal",
-            "Enseñar las últimas cinco personas a las que enviaste mensajes de texto",
-            "Declararte a un desconocido de la fiesta",
-            "Cortarte 4 cm de pelo",
-            "Hacerte una foto en una pose ridícula y publicarla en tus redes sociales",
-            "Dejar que el resto del grupo envíe un MD a alguien de tu cuenta de Instagram",
-            "Comer salsa picante, una cucharada",
-            "Llamar a un amigo que no esté presente y convencerlo de una historia absurda",
-            "Hacer 25 flexiones",
-            "Mandar un selfie a una persona aleatoria de Instagram o WhatsApp",
-            "Mantener dos cubitos de hielo en la boca hasta que se derritan",
-            "Decir 3 cosas malas y 3 buenas de la persona que te ha tocado como pareja",
-            "Hacer una videollamada a un número aleatorio",
-            "Dar un masaje en los pies a la persona de tu derecha",
-            "Poner 7 líquidos diferentes en un vaso y beberlo",
-            "Hacer un baile erótico a la persona que elijas",
-            "Preguntarle a alguien de la fiesta si creen que eres atractivo/a",
-            "Abrazar a un desconocido sin hablar ni una palabra",
-            "Gritar '¡Te has enamorado!' muy fuerte y varias veces",
-            "Llamar a tu pareja y decirle que estás embarazada",
-            "Beberte cuatro vasos de agua seguidos",
-            "Mandar un emoji sugerente a tu jefe",
-            "Echarte jabón de manos en el pelo",
-            "Gemir durante un minuto",
-            "Ronronear como un gato durante un minuto",
-            "Grabar un gemido y mandarlo como mensaje de voz",
-            "Vaciar tu cartera/monedero y enseñar a todos lo que hay dentro",
-            "Tirarte a una piscina sin ropa",
-            "Empezar a cantarle una canción a un camarero desconocido sin decirle nada más",
-            "Lamer la mejilla del jugador que quieras",
-            "Publicar un story con un selfie horrible",
-            "Ir al micro y gritar algo vergonzoso",
-            "Hacer tantas flexiones como puedas en un minuto",
-            "Fingir ser la persona de tu derecha durante 10 minutos",
-            "Comer un bocadillo sin usar las manos",
-            "Beber una copa sin usar las manos",
-            "Intentar meter todo el puño en la boca",
-            "Contar a todos una historia embarazosa sobre ti mismo",
-            "Oler la axila de un desconocido",
-            "Morder la oreja a un desconocido",
-            "Hablar con acento mexicano durante 10 minutos",
-            "Mandar un WhatsApp a alguien y borrarlo al segundo",
-            "Aullar como un lobo durante dos minutos",
-            "Ladrar cada vez que alguien te pregunte algo durante la noche",
-            "Hacer un striptease a tu pareja",
-            "Cantar una canción entera con el micro",
-            "Desplazarte por tu agenda telefónica hasta que alguien te diga que pares",
-            "Ponerte la ropa al revés durante 1 hora",
-            "Acabarte la bebida sin parar, sin responsabilidad",
-            "Hacer reír a un desconocido",
-            "Imitar a un amigo delante suyo",
-            "Estar sin hablar 20 minutos",
-            "Decir dos verdades y una mentira, y el grupo tiene que adivinar la mentira",
-            "Mostrar tu talento secreto",
-            "Contestar con sí a todo durante 1 hora",
-            "Contestar con no a todo durante 1 hora",
-            "Hablar con acento andaluz durante 1 hora",
-            "Conversar al menos 5 minutos con un desconocido",
-            "Mantener una mirada intensa y seductora con alguien durante 1 minuto",
-            "Robar una copa a alguien sin que se entere",
-            "Llenar tu boca de bebida y hacer gárgaras mientras respondes",
-            "Sonreír todo lo que puedas y mantenerlo durante 2 minutos",
-            "Insultar de forma personalizada a todos los presentes",
-            "Tomarte una copa sin parar",
-            "Pasarte la noche sin usar el móvil",
-            "Pretender que eres famoso/a con desconocidos",
-            "Salir a la fiesta y pretender ser famoso/a",
-            "Pedir unas monedas a alguien desconocido",
-            "Preguntar a un desconocido si le conoces de algo",
-            "Preguntar a un desconocido si puedes dormir en su casa",
-            "Invitar a una copa al primero que pase por la fiesta",
-            "Conseguir una copa gratis en la fiesta",
-            "Mandarle una foto de una peineta a tu ex",
-            "Escribir un email a tu jefe en inglés",
-            "Ponerte a hablar con un árbol durante cinco minutos",
-            "Llamar a un número aleatorio y decir que le ha tocado un premio",
-            "Llamar a tu ex y decirle lo primero que se te ocurra",
-            "Llamar a tu crush y decirle que te gusta",
-            "Elegir un jugador y dejar que te haga cosquillas durante un minuto",
-            "Hacer un concurso de quién dice más palabrotas contra el jugador que elijas",
-            "Hacerte un selfie con la primera persona que pase a tu lado",
-            "Preguntar a un desconocido de la fiesta dónde está el baño en inglés",
-            "Llamar a tu madre y decirle que la quieres",
-            "Hablar toda la noche en un idioma inventado",
-            "Hacerte amigo/a del DJ que pinche en la fiesta",
-            "Pedir la canción más ridícula que se te ocurra en la fiesta",
-            "Invitar a bailar a un desconocido",
-            "Estar dos horas con la boca abierta",
-            "Beberte una cerveza en menos de 30 segundos",
-            "Publicar una foto en la que salgas mal en Instagram durante 2 minutos",
-            "Enseñar el último vídeo que has visto en YouTube",
-            "Mandar un mensaje a uno de tus ex insultándolo",
-            "Invitar a salir a la persona que te gusta",
-            "Tomarte tres chupitos seguidos",
-            "Grabar un vídeo cantando pasionalmente en la ducha",
-            "Mandar un emoji a tu jefe",
-            "Hacer ver que estás teniendo una conversación vergonzosa por teléfono",
-            "Correr a la pata coja durante dos minutos sin dejar de decir el abecedario",
-            "Abrazar a la primera persona que encuentres en la fiesta",
-            "Empezar a cantarle una canción a alguien de la fiesta",
-            "Caminar de espaldas durante 2 minutos en la fiesta",
-            "Dar 10 vueltas sobre ti mismo y luego ponerse a correr en línea recta",
-            "Hacer una lista con las partes del cuerpo que más te gustan de otra persona",
-            "Mandar un mensaje sólo con emojis, otra persona tendrá que decodificarlos",
-            "Grabarte cantando una canción vergonzosa que te guste",
-            "Mandar un audio a alguien haciendo ver que estás teniendo un orgasmo",
-            "Comentar una foto de Instagram de algún conocido con algo picante",
-            "Contar un sueño erótico que hayas tenido y que recuerdes",
-            "Hacerte pasar por otra persona toda la noche",
-            "Cantar a alguien una canción romántica a capela",
-            "Pedir una foto divertida a alguien de la fiesta",
-            "Dejar que alguien te vista como quiera durante las siguientes rondas",
-            "Preguntar a alguien random qué es lo más extraño que han hecho nunca",
-            "Tomar un vaso de agua sin emplear tus manos",
-            "Crear y recitar un poema sobre la persona a tu izquierda",
-            "Seguir a alguien sin que se dé cuenta durante 2 minutos",
-            "Quedarte inmóvil durante 2 minutos mientras los demás intentan hacerte reír",
-            "Colocar una galleta en tu frente y intentar comerla moviendo sólo tu cara",
-            "Tomar una bebida con una mezcla de tres ingredientes que elijan tus amigos",
-            "Quitar una prenda a alguien con los dientes",
-            "Bajarle el cierre del pantalón a otro jugador",
-            "Moverte como una serpiente durante dos minutos",
-            "Imitar la portada de una revista famosa",
-            "Cantar con agua en la boca",
-            "Dejar que alguien te haga un peinado loco y lúcelo durante 30 minutos",
-            "Llamar a un ser querido y hacerle una confesión falsa que el grupo acordó",
-            "Utilizar el baño con la puerta abierta durante la fiesta",
-            "Ofrecer un masaje a alguien de la fiesta",
-            "Mandar un audio a un contacto aleatorio gimiendo",
-            "Inflar un globo hasta que explote",
-            "Colarte en un hotel"
+        // ---------------------------------------------------------------
+        // Datos: retos (n = nivel: s=suave, p=picante, l=leyenda)
+        // ---------------------------------------------------------------
+        const RETOS = [
+            { t: "Enseñar la foto más embarazosa de tu teléfono", n: "s" },
+            { t: "Cambiar tu foto de perfil de WhatsApp por una en la que salgas fatal", n: "s" },
+            { t: "Enseñar los últimos 5 mensajes de texto que has enviado", n: "s" },
+            { t: "Declararte a un desconocido de la fiesta", n: "p" },
+            { t: "Hacerte una foto en una pose ridícula y subirla a tus redes", n: "s" },
+            { t: "Dejar que el grupo envíe un mensaje directo desde tu Instagram a quien ellos elijan", n: "p" },
+            { t: "Comer una cucharada de salsa picante", n: "p" },
+            { t: "Llamar a un amigo que no esté presente y convencerlo de una historia absurda", n: "p" },
+            { t: "Hacer 25 flexiones", n: "s" },
+            { t: "Mandar un selfie a una persona random de tu agenda o Instagram", n: "p" },
+            { t: "Mantener dos cubitos de hielo en la boca hasta que se derritan", n: "s" },
+            { t: "Decir 3 cosas buenas y 3 mejorables de la persona que tengas al lado", n: "p" },
+            { t: "Hacer una videollamada a un número aleatorio", n: "p" },
+            { t: "Poner 7 líquidos distintos en un vaso y bebértelo", n: "l" },
+            { t: "Preguntarle a alguien de la fiesta si te ve atractivo/a, y aguantar la respuesta", n: "s" },
+            { t: "Gritar '¡Te has enamorado!' muy fuerte y varias veces", n: "s" },
+            { t: "Beberte cuatro vasos de agua seguidos", n: "s" },
+            { t: "Echarte un poco de jabón de manos en el pelo", n: "p" },
+            { t: "Ronronear como un gato durante un minuto", n: "s" },
+            { t: "Vaciar tu cartera o bolso y enseñar a todos lo que llevas dentro", n: "s" },
+            { t: "Empezar a cantarle una canción a un camarero sin darle más explicación", n: "p" },
+            { t: "Publicar una story con el selfie más feo que tengas", n: "s" },
+            { t: "Ir a por el micro (si lo hay) y gritar algo vergonzoso", n: "p" },
+            { t: "Fingir ser la persona que tienes al lado durante 10 minutos", n: "p" },
+            { t: "Comer algo que tengas a mano sin usar las manos", n: "s" },
+            { t: "Beberte tu copa sin usar las manos", n: "p" },
+            { t: "Intentar meterte el puño entero en la boca", n: "s" },
+            { t: "Contar una historia vergonzosa sobre ti mismo delante de todos", n: "s" },
+            { t: "Hablar con el acento que el grupo te indique durante 10 minutos", n: "p" },
+            { t: "Mandar un WhatsApp random de tu lista y borrarlo al segundo", n: "s" },
+            { t: "Aullar como un lobo durante dos minutos", n: "s" },
+            { t: "Ladrar en vez de responder cada vez que te pregunten algo esta noche", n: "p" },
+            { t: "Cantar una canción entera usando el micro (o a pleno pulmón)", n: "s" },
+            { t: "Desplazarte por tu galería de fotos hasta que alguien te diga que pares", n: "s" },
+            { t: "Ponerte la ropa al revés durante la próxima hora", n: "s" },
+            { t: "Acabarte tu bebida de un trago", n: "p" },
+            { t: "Hacer reír a un desconocido en menos de un minuto", n: "s" },
+            { t: "Imitar a la persona que tengas más cerca durante un minuto", n: "p" },
+            { t: "Estar 20 minutos sin hablar", n: "l" },
+            { t: "Decir dos verdades y una mentira, y que el grupo adivine cuál es la mentira", n: "s" },
+            { t: "Mostrar tu talento secreto ahora mismo", n: "s" },
+            { t: "Contestar 'sí' a todo durante una hora", n: "l" },
+            { t: "Contestar 'no' a todo durante una hora", n: "l" },
+            { t: "Conversar al menos 5 minutos seguidos con un desconocido", n: "s" },
+            { t: "Retar a alguien a un duelo de miradas de un minuto sin reírte", n: "p" },
+            { t: "Llenar la boca de bebida y hacer gárgaras mientras intentas responder preguntas", n: "p" },
+            { t: "Sonreír todo lo que puedas y aguantarlo 2 minutos", n: "s" },
+            { t: "Pasarte el resto de la noche sin mirar el móvil", n: "l" },
+            { t: "Hacerte pasar por famoso/a y ver cuánta gente se lo cree", n: "l" },
+            { t: "Pedir unas monedas a un desconocido explicando que es para una buena causa (inventada)", n: "s" },
+            { t: "Preguntar a un desconocido si le conoces de algo", n: "s" },
+            { t: "Preguntar a un desconocido si puedes dormir en su casa esta noche", n: "p" },
+            { t: "Invitar a una copa a la primera persona que pase", n: "p" },
+            { t: "Conseguir que te inviten a una copa gratis", n: "p" },
+            { t: "Ponerte a hablar con una planta o un árbol durante 5 minutos como si te entendiera", n: "s" },
+            { t: "Llamar a un número aleatorio y decirle que le ha tocado un premio", n: "p" },
+            { t: "Llamar a tu madre (o a quien tú quieras) y decirle que la quieres", n: "s" },
+            { t: "Hablar toda la noche en un idioma inventado", n: "l" },
+            { t: "Hacerte amigo/a del DJ antes de que acabe la noche", n: "p" },
+            { t: "Invitar a bailar a un desconocido", n: "s" },
+            { t: "Beberte una cerveza en menos de 30 segundos", n: "p" },
+            { t: "Enseñar el último vídeo que has visto en el móvil", n: "s" },
+            { t: "Tomarte tres chupitos seguidos", n: "l" },
+            { t: "Hacer ver que tienes una conversación vergonzosa por teléfono", n: "p" },
+            { t: "Correr a la pata coja 2 minutos sin dejar de decir el abecedario", n: "p" },
+            { t: "Caminar de espaldas durante 2 minutos", n: "s" },
+            { t: "Dar 10 vueltas sobre ti mismo y salir corriendo en línea recta", n: "p" },
+            { t: "Mandar un mensaje solo con emojis y que alguien lo traduzca", n: "s" },
+            { t: "Cantar una canción romántica a capela a quien tú elijas", n: "p" },
+            { t: "Pedir una foto divertida a alguien de la fiesta", n: "s" },
+            { t: "Dejar que alguien te vista a su gusto el resto de la ronda", n: "p" },
+            { t: "Preguntar a alguien random cuál es lo más raro que ha hecho nunca", n: "s" },
+            { t: "Crear y recitar un poema improvisado sobre la persona que tengas al lado", n: "s" },
+            { t: "Quedarte inmóvil 2 minutos mientras los demás intentan hacerte reír", n: "p" },
+            { t: "Colocarte una galleta en la frente e intentar comerla moviendo solo la cara", n: "l" },
+            { t: "Moverte como una serpiente durante dos minutos", n: "s" },
+            { t: "Imitar la portada de una revista famosa con tu cara", n: "s" },
+            { t: "Cantar con agua en la boca", n: "p" },
+            { t: "Dejar que alguien te haga un peinado loco y lucirlo 30 minutos", n: "p" },
+            { t: "Llamar a un ser querido y hacerle una confesión falsa que el grupo invente", n: "p" },
+            { t: "Inflar un globo hasta que explote (si hay alguno a mano)", n: "s" },
+            { t: "Hacer flexiones sin parar hasta que el grupo diga basta", n: "l" },
+            // Nuevos, pensados para discoteca con desconocidos
+            { t: "Pedir a alguien que puntúe tu baile del 1 al 10 y aceptar la nota sin discutir", n: "p" },
+            { t: "Presentarte a un grupo de desconocidos como el DJ suplente de esta noche", n: "p" },
+            { t: "Pedir una canción al DJ con cara de que es la última petición de tu vida", n: "p" },
+            { t: "Brindar con 3 desconocidos sin decir ni una palabra", n: "s" },
+            { t: "Conseguir que alguien diga tu nombre como si presentara las campanadas", n: "p" },
+            { t: "Imitar el baile de la persona que te indiquen, mal, con cara muy seria", n: "p" },
+            { t: "Decirle a alguien que es clavadita a una famosa e inventarte cuál", n: "s" },
+            { t: "Hacer una encuesta relámpago a 3 personas sobre qué nota le ponen al DJ", n: "s" },
+            { t: "Pedir en la barra 'lo que pediría alguien con mucho criterio' y aceptar lo que te pongan", n: "p" },
+            { t: "Convencer a un grupo de desconocidos de que eres el dueño del local", n: "l" },
+            { t: "Bailar 30 segundos como si fuera tu canción favorita del mundo (aunque la odies)", n: "s" },
+            { t: "Pedirle a un camarero que te recomiende 'lo que pide la gente interesante'", n: "p" },
+            { t: "Montar una ovación de pie para la ronda de chupitos de otra mesa", n: "s" },
+            { t: "Hacer de reportero y entrevistar a un desconocido sobre 'la noche del siglo'", n: "p" },
+            { t: "Inventarte una coreografía de 15 segundos y enseñársela a un grupo", n: "p" },
+            { t: "Pedir que te hagan una foto como si fueras portada de revista", n: "s" },
+            { t: "Anunciar al grupo que acabas de batir un récord mundial inventado", n: "s" },
+            { t: "Hacer de comentarista deportivo del baile de la pista durante 1 minuto", n: "p" },
+            { t: "Preguntar a 3 desconocidos cuál es su reto favorito de esta app", n: "s" },
+            { t: "Proponer un brindis dramático dedicado a 'los que no pudieron venir esta noche'", n: "s" },
+            { t: "Pedir que te voten 'mejor vestido/a de la noche' a un grupo random", n: "p" },
+            { t: "Cada vez que te guste una canción, aplaudir como una foca durante 10 segundos", n: "s" },
+            { t: "Decirle a la barra que estás celebrando algo random e inventarte qué", n: "p" },
+            { t: "Retar a un grupo de desconocidos a un concurso de caras serias: el primero que ría pierde", n: "p" },
+            { t: "Pedir que te hagan de fotógrafo oficial de la noche durante 5 minutos", n: "s" }
         ];
 
-        const retoTrucado = "Besar a la persona que se te indique";
+        const NIVEL_LABEL = { s: "Suave", p: "Picante", l: "Leyenda" };
 
-        const colores = [
-            '#E74C3C', '#9B59B6', '#3498DB', '#1ABC9C', '#F39C12',
-            '#E67E22', '#34495E', '#2C3E50', '#8E44AD', '#2980B9',
-            '#16A085', '#27AE60', '#D35400', '#C0392B', '#7F8C8D'
+        const RETO_TRUCADO_PRESETS = [
+            "Besar a la persona que se te indique",
+            "Dar un beso a la persona que te indiquen (sí, a esa)",
+            "Intercambiar el nombre con la persona que te indiquen el resto de la noche",
+            "Pedirle el número a la persona que te indiquen con la excusa más mala posible"
         ];
 
+        const PALETAS = [
+            ['#ff3d81', '#8b2bff'], ['#ff9a3d', '#ff3d81'], ['#2d9bff', '#8b2bff'],
+            ['#1abc9c', '#2d9bff'], ['#f5a623', '#ff3d81'], ['#9b59b6', '#2d9bff'],
+            ['#e74c3c', '#f5a623'], ['#16a085', '#1abc9c'], ['#8e44ad', '#e74c3c'],
+            ['#2980b9', '#1abc9c'], ['#27ae60', '#2d9bff'], ['#d35400', '#f5a623'],
+            ['#c0392b', '#8b2bff'], ['#34495e', '#2d9bff'], ['#7f8c8d', '#9b59b6']
+        ];
+
+        // ---------------------------------------------------------------
+        // Estado persistido
+        // ---------------------------------------------------------------
+        function cargarJSON(clave, porDefecto) {
+            try {
+                const v = localStorage.getItem(clave);
+                if (!v) return porDefecto;
+                return Object.assign({}, porDefecto, JSON.parse(v));
+            } catch (e) {
+                return porDefecto;
+            }
+        }
+
+        function guardarJSON(clave, valor) {
+            try {
+                localStorage.setItem(clave, JSON.stringify(valor));
+            } catch (e) { /* almacenamiento no disponible: seguimos sin persistir */ }
+        }
+
+        let ajustes = cargarJSON('challengerAjustes', {
+            sonido: true,
+            vibracion: true,
+            categorias: { s: true, p: true, l: true }
+        });
+
+        let stats = cargarJSON('challengerStats', {
+            contador: 0,
+            hechos: 0,
+            rajos: 0,
+            racha: 0,
+            historial: [] // { texto, nivel, resultado: 'hecho'|'rajo'|null }
+        });
+
+        let truco = cargarJSON('challengerTruco', { preset: '0', custom: '' });
+
+        function textoTrucadoActual() {
+            if (truco.preset === 'custom' && truco.custom && truco.custom.trim()) {
+                return truco.custom.trim();
+            }
+            const idx = parseInt(truco.preset, 10);
+            return RETO_TRUCADO_PRESETS[Number.isNaN(idx) ? 0 : idx] || RETO_TRUCADO_PRESETS[0];
+        }
+
+        // ---------------------------------------------------------------
+        // Referencias DOM
+        // ---------------------------------------------------------------
+        const splash = document.getElementById('splash');
+        const retoCard = document.getElementById('retoCard');
+        const retoText = document.getElementById('retoText');
+        const nivelChip = document.getElementById('nivelChip');
+        const hintText = document.getElementById('hintText');
+        const contadorPill = document.getElementById('contadorPill');
+        const rachaPill = document.getElementById('rachaPill');
+        const confettiLayer = document.getElementById('confettiLayer');
+        const resultadoBotones = document.getElementById('resultadoBotones');
+        const btnHistorial = document.getElementById('btnHistorial');
+        const historialPanel = document.getElementById('historialPanel');
+        const historialVacio = document.getElementById('historialVacio');
+        const historialLista = document.getElementById('historialLista');
+        const versionTap = document.getElementById('versionTap');
+        const btnSettings = document.getElementById('btnSettings');
+        const btnCerrarAjustes = document.getElementById('btnCerrarAjustes');
+        const settingsOverlay = document.getElementById('settingsOverlay');
+        const toggleSonido = document.getElementById('toggleSonido');
+        const toggleVibracion = document.getElementById('toggleVibracion');
+        const catSuave = document.getElementById('catSuave');
+        const catPicante = document.getElementById('catPicante');
+        const catLeyenda = document.getElementById('catLeyenda');
+        const secretoGrupo = document.getElementById('secretoGrupo');
+        const trucoCustomTexto = document.getElementById('trucoCustomTexto');
+
+        // ---------------------------------------------------------------
+        // Splash: 1s y fuera
+        // ---------------------------------------------------------------
+        setTimeout(() => {
+            splash.classList.add('splash-oculto');
+            setTimeout(() => { splash.style.display = 'none'; }, 400);
+        }, 1000);
+
+        // ---------------------------------------------------------------
+        // Randomizador
+        // ---------------------------------------------------------------
         let isRandomizing = false;
         let randomInterval;
-        let currentRetoIndex = 0;
-        let currentColorIndex = 0;
+        let currentRetoIndex = -1;
+        let currentPaletaIndex = -1;
         let trucazoActivado = false;
+        let pendienteResolucion = false;
+        let modalAbierto = false;
 
-        const retoText = document.getElementById('retoText');
-        const body = document.body;
-        const zonaTruco = document.querySelector('.zona-truco');
+        function poolActual() {
+            const pool = RETOS.filter(r => ajustes.categorias[r.n]);
+            return pool.length ? pool : RETOS;
+        }
 
-        function getRandomReto() {
-            let newIndex;
+        function elegirReto() {
+            const pool = poolActual();
+            let idx;
             do {
-                newIndex = Math.floor(Math.random() * retos.length);
-            } while (newIndex === currentRetoIndex && retos.length > 1);
-            currentRetoIndex = newIndex;
-            return retos[newIndex];
+                idx = Math.floor(Math.random() * pool.length);
+            } while (pool.length > 1 && pool[idx] === RETOS[currentRetoIndex]);
+            const reto = pool[idx];
+            currentRetoIndex = RETOS.indexOf(reto);
+            return reto;
         }
 
-        function getRandomColor() {
-            let newIndex;
+        function elegirPaleta() {
+            let idx;
             do {
-                newIndex = Math.floor(Math.random() * colores.length);
-            } while (newIndex === currentColorIndex && colores.length > 1);
-            currentColorIndex = newIndex;
-            return colores[newIndex];
+                idx = Math.floor(Math.random() * PALETAS.length);
+            } while (PALETAS.length > 1 && idx === currentPaletaIndex);
+            currentPaletaIndex = idx;
+            return PALETAS[idx];
         }
 
-        function updateDisplay() {
-            const reto = getRandomReto();
-            const color = getRandomColor();
-
-            retoText.textContent = reto;
-            body.style.backgroundColor = color;
+        function pintarTick() {
+            const reto = elegirReto();
+            const [a, b] = elegirPaleta();
+            retoText.textContent = reto.t;
+            nivelChip.hidden = false;
+            nivelChip.className = 'nivel-chip ' + reto.n;
+            nivelChip.textContent = NIVEL_LABEL[reto.n];
+            retoCard.style.background = `linear-gradient(135deg, ${a}, ${b})`;
+            return reto;
         }
 
-        function startRandomizing() {
-            if (isRandomizing) return;
+        function estaEnZonaTruco(y) {
+            return y <= window.innerHeight * 0.25;
+        }
+
+        function iniciarRandomizacion() {
+            if (isRandomizing || modalAbierto) return;
             isRandomizing = true;
-
-            randomInterval = setInterval(() => {
-                updateDisplay();
-            }, 100); // Cambia cada 100ms para que sea súper rápido
+            pendienteResolucion = false;
+            resultadoBotones.hidden = true;
+            retoCard.classList.add('girando');
+            randomInterval = setInterval(pintarTick, 90);
         }
 
-        function stopRandomizing() {
+        function detenerRandomizacion() {
             if (!isRandomizing) return;
             isRandomizing = false;
             clearInterval(randomInterval);
+            retoCard.classList.remove('girando');
 
-            // Si el trucazo estaba activado, mostrar el reto trucado al final
+            let retoFinal;
+            let nivelFinal;
             if (trucazoActivado) {
-                const color = getRandomColor();
-                retoText.textContent = retoTrucado;
-                body.style.backgroundColor = color;
-                trucazoActivado = false; // Resetear el trucazo
+                retoFinal = textoTrucadoActual();
+                nivelFinal = 'l';
+            } else {
+                const ultimo = elegirReto();
+                retoFinal = ultimo.t;
+                nivelFinal = ultimo.n;
+            }
+            trucazoActivado = false;
+
+            const [a, b] = elegirPaleta();
+            retoText.textContent = retoFinal;
+            nivelChip.hidden = false;
+            nivelChip.className = 'nivel-chip ' + nivelFinal;
+            nivelChip.textContent = NIVEL_LABEL[nivelFinal];
+            retoCard.style.background = `linear-gradient(135deg, ${a}, ${b})`;
+
+            retoCard.classList.add('pop');
+            setTimeout(() => retoCard.classList.remove('pop'), 460);
+
+            lanzarConfeti(a, b);
+            vibrar([25, 45, 25]);
+            beep();
+
+            stats.contador++;
+            stats.historial.unshift({ texto: retoFinal, nivel: nivelFinal, resultado: null });
+            stats.historial = stats.historial.slice(0, 5);
+            guardarJSON('challengerStats', stats);
+
+            pendienteResolucion = true;
+            resultadoBotones.hidden = false;
+            hintText.textContent = 'Mantén pulsado para el siguiente reto';
+
+            actualizarContadores();
+            renderHistorial();
+        }
+
+        function actualizarContadores() {
+            contadorPill.textContent = 'Reto nº ' + stats.contador;
+            rachaPill.textContent = '🔥 Racha ' + stats.racha;
+        }
+
+        function renderHistorial() {
+            historialLista.innerHTML = '';
+            if (!stats.historial.length) {
+                historialVacio.hidden = false;
+                return;
+            }
+            historialVacio.hidden = true;
+            stats.historial.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'historial-item';
+                const icono = item.resultado === 'hecho' ? '✅' : (item.resultado === 'rajo' ? '🙈' : '⏳');
+                li.innerHTML = `<span class="chip-mini ${item.nivel}">${NIVEL_LABEL[item.nivel]}</span><span class="texto">${item.texto}</span><span class="resultado-icono">${icono}</span>`;
+                historialLista.appendChild(li);
+            });
+        }
+
+        function resolverReto(resultado) {
+            if (!pendienteResolucion) return;
+            pendienteResolucion = false;
+            if (resultado === 'hecho') {
+                stats.hechos++;
+                stats.racha++;
+            } else {
+                stats.rajos++;
+                stats.racha = 0;
+            }
+            if (stats.historial[0]) stats.historial[0].resultado = resultado;
+            guardarJSON('challengerStats', stats);
+            resultadoBotones.hidden = true;
+            actualizarContadores();
+            renderHistorial();
+        }
+
+        // ---------------------------------------------------------------
+        // Confeti / sonido / vibración
+        // ---------------------------------------------------------------
+        function lanzarConfeti(colorA, colorB) {
+            const colores = [colorA, colorB, '#ffffff'];
+            for (let i = 0; i < 18; i++) {
+                const pieza = document.createElement('span');
+                pieza.className = 'confeti-pieza';
+                const ang = Math.random() * Math.PI * 2;
+                const dist = 70 + Math.random() * 90;
+                pieza.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
+                pieza.style.setProperty('--dy', Math.sin(ang) * dist + 'px');
+                pieza.style.setProperty('--rot', (Math.random() * 540 - 270) + 'deg');
+                pieza.style.background = colores[i % colores.length];
+                pieza.style.animationDelay = (Math.random() * 0.08) + 's';
+                confettiLayer.appendChild(pieza);
+                setTimeout(() => pieza.remove(), 1100);
             }
         }
 
-        // Función para detectar si el clic/touch está en la zona trucada
-        function estEnZonaTruco(event) {
-            const y = event.clientY || (event.touches && event.touches[0] ? event.touches[0].clientY : 0);
-            return y <= window.innerHeight * 0.25; // 25% superior
+        function vibrar(patron) {
+            if (!ajustes.vibracion) return;
+            try {
+                if (navigator.vibrate) navigator.vibrate(patron);
+            } catch (e) { /* no soportado: silencio */ }
         }
 
-        // Eventos unificados para mouse
-        body.addEventListener('mousedown', (e) => {
-            if (estEnZonaTruco(e)) {
-                trucazoActivado = true;
+        function beep() {
+            if (!ajustes.sonido) return;
+            try {
+                const Ctx = window.AudioContext || window.webkitAudioContext;
+                if (!Ctx) return;
+                const ctx = new Ctx();
+                const o = ctx.createOscillator();
+                const g = ctx.createGain();
+                o.type = 'triangle';
+                o.frequency.setValueAtTime(880, ctx.currentTime);
+                o.frequency.exponentialRampToValueAtTime(240, ctx.currentTime + 0.18);
+                g.gain.setValueAtTime(0.16, ctx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+                o.connect(g).connect(ctx.destination);
+                o.start();
+                o.stop(ctx.currentTime + 0.22);
+            } catch (e) { /* audio no disponible: silencio */ }
+        }
+
+        // ---------------------------------------------------------------
+        // Gesto global: mantener pulsado en cualquier parte = randomizar
+        // (incluida la cabecera). Excepciones: controles con .no-gesture.
+        // ---------------------------------------------------------------
+        function esControlInteractivo(target) {
+            return !!(target && target.closest && target.closest('.no-gesture'));
+        }
+
+        document.addEventListener('mousedown', (e) => {
+            if (esControlInteractivo(e.target)) return;
+            if (estaEnZonaTruco(e.clientY)) trucazoActivado = true;
+            iniciarRandomizacion();
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isRandomizing) detenerRandomizacion();
+        });
+
+        document.addEventListener('mouseleave', () => {
+            if (isRandomizing) detenerRandomizacion();
+        });
+
+        document.addEventListener('touchstart', (e) => {
+            if (esControlInteractivo(e.target)) return;
+            e.preventDefault();
+            const t = e.touches[0];
+            if (t && estaEnZonaTruco(t.clientY)) trucazoActivado = true;
+            if (e.touches.length >= 2) trucazoActivado = true; // segundo disparador: dos dedos
+            iniciarRandomizacion();
+        }, { passive: false });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isRandomizing) e.preventDefault();
+        }, { passive: false });
+
+        document.addEventListener('touchend', (e) => {
+            if (esControlInteractivo(e.target) && !isRandomizing) return;
+            if (e.touches.length === 0) detenerRandomizacion();
+        }, { passive: false });
+
+        document.addEventListener('touchcancel', (e) => {
+            if (e.touches.length === 0) detenerRandomizacion();
+        }, { passive: false });
+
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+        // ---------------------------------------------------------------
+        // Resultado: Hecho / Me rajo
+        // ---------------------------------------------------------------
+        resultadoBotones.addEventListener('click', (e) => {
+            const btn = e.target.closest('.btn-resultado');
+            if (!btn) return;
+            resolverReto(btn.dataset.res);
+        });
+
+        // ---------------------------------------------------------------
+        // Historial desplegable
+        // ---------------------------------------------------------------
+        btnHistorial.addEventListener('click', () => {
+            const abierto = historialPanel.classList.toggle('oculto');
+            btnHistorial.classList.toggle('abierto', !abierto);
+        });
+
+        // ---------------------------------------------------------------
+        // Ajustes
+        // ---------------------------------------------------------------
+        function abrirAjustes() {
+            toggleSonido.checked = ajustes.sonido;
+            toggleVibracion.checked = ajustes.vibracion;
+            catSuave.checked = ajustes.categorias.s;
+            catPicante.checked = ajustes.categorias.p;
+            catLeyenda.checked = ajustes.categorias.l;
+            const radio = document.querySelector(`input[name="trucoPreset"][value="${truco.preset}"]`);
+            if (radio) radio.checked = true;
+            trucoCustomTexto.value = truco.custom || '';
+            settingsOverlay.classList.remove('oculto');
+            modalAbierto = true;
+        }
+
+        function cerrarAjustes() {
+            settingsOverlay.classList.add('oculto');
+            modalAbierto = false;
+        }
+
+        btnSettings.addEventListener('click', abrirAjustes);
+        btnCerrarAjustes.addEventListener('click', cerrarAjustes);
+        settingsOverlay.addEventListener('click', (e) => {
+            if (e.target === settingsOverlay) cerrarAjustes();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalAbierto) cerrarAjustes();
+        });
+
+        toggleSonido.addEventListener('change', () => {
+            ajustes.sonido = toggleSonido.checked;
+            guardarJSON('challengerAjustes', ajustes);
+        });
+        toggleVibracion.addEventListener('change', () => {
+            ajustes.vibracion = toggleVibracion.checked;
+            guardarJSON('challengerAjustes', ajustes);
+        });
+        [['s', catSuave], ['p', catPicante], ['l', catLeyenda]].forEach(([nivel, el]) => {
+            el.addEventListener('change', () => {
+                ajustes.categorias[nivel] = el.checked;
+                guardarJSON('challengerAjustes', ajustes);
+            });
+        });
+
+        document.querySelectorAll('input[name="trucoPreset"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                truco.preset = radio.value;
+                guardarJSON('challengerTruco', truco);
+            });
+        });
+        trucoCustomTexto.addEventListener('input', () => {
+            truco.custom = trucoCustomTexto.value;
+            guardarJSON('challengerTruco', truco);
+        });
+
+        // ---------------------------------------------------------------
+        // Ajuste oculto: 5 toques seguidos sobre la versión del pie
+        // ---------------------------------------------------------------
+        let tapsVersion = 0;
+        let tapsVersionTimer = null;
+        versionTap.addEventListener('click', () => {
+            tapsVersion++;
+            clearTimeout(tapsVersionTimer);
+            tapsVersionTimer = setTimeout(() => { tapsVersion = 0; }, 1500);
+            if (tapsVersion >= 5) {
+                tapsVersion = 0;
+                clearTimeout(tapsVersionTimer);
+                abrirAjustes();
+                secretoGrupo.hidden = false;
+                setTimeout(() => secretoGrupo.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
             }
-            startRandomizing();
         });
 
-        body.addEventListener('mouseup', stopRandomizing);
-        body.addEventListener('mouseleave', stopRandomizing);
-
-        // Eventos unificados para touch (móvil)
-        body.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (estEnZonaTruco(e)) {
-                trucazoActivado = true;
-            }
-            startRandomizing();
-        });
-
-        body.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            stopRandomizing();
-        });
-
-        body.addEventListener('touchcancel', (e) => {
-            e.preventDefault();
-            stopRandomizing();
-        });
-
-        // Configuración inicial
-        body.style.backgroundColor = colores[0];
+        // ---------------------------------------------------------------
+        // Estado inicial
+        // ---------------------------------------------------------------
+        actualizarContadores();
+        renderHistorial();
+        if (stats.contador > 0) {
+            hintText.textContent = 'Mantén pulsado para el siguiente reto';
+        }
     </script>
 </body>
 
