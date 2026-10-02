@@ -4,28 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#120a2e">
-    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#1a1a1a">
     <meta name="format-detection" content="telephone=no">
     <meta name="description" content="Challenger: mantén pulsado y deja que la suerte elija tu reto.">
     <title>Challenger</title>
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-1: #0b0620;
-            --bg-3: #2a0f3f;
-            --text: #ffffff;
-            --muted: rgba(255, 255, 255, 0.75);
-            --muted-2: rgba(255, 255, 255, 0.55);
-            --accent: #ff3d81;
-            --accent-2: #8b2bff;
-            --header-h: 54px;
-            --footer-h: 44px;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -39,215 +26,52 @@
         }
 
         body {
-            position: fixed;
-            inset: 0;
-            font-family: 'Outfit', 'Poppins', sans-serif;
-            color: var(--text);
-            background-color: var(--bg-1);
-            transition: background-color .08s linear;
-            overflow: hidden;
-            touch-action: none;
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.1s ease;
             user-select: none;
             -webkit-user-select: none;
             -webkit-touch-callout: none;
-        }
-
-        /* ---------- Splash ---------- */
-        .splash {
+            overflow: hidden;
             position: fixed;
             inset: 0;
-            z-index: 999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            background: radial-gradient(circle at 50% 30%, var(--bg-3), var(--bg-1) 70%);
-            transition: opacity .35s ease, visibility .35s ease;
+            touch-action: none;
         }
 
-        .splash.splash-oculto {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .splash-logo {
-            width: 84px;
-            height: 84px;
-            filter: drop-shadow(0 8px 24px rgba(139, 43, 255, .55));
-            animation: splash-pulse 1.1s ease-in-out infinite;
-        }
-
-        .splash-title {
-            font-family: 'Fredoka', 'Outfit', sans-serif;
-            font-size: 30px;
-            font-weight: 600;
-            letter-spacing: .5px;
-        }
-
-        .splash-sub {
-            font-size: 13px;
-            color: var(--muted);
-        }
-
-        @keyframes splash-pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-        }
-
-        /* ---------- Layout shell ---------- */
-        .app {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .app-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: var(--header-h);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 12px;
-            background: rgba(10, 5, 28, 0.32);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            z-index: 40;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .brand-logo {
-            width: 26px;
-            height: 26px;
-            flex: none;
-        }
-
-        .brand-name {
-            font-family: 'Fredoka', 'Outfit', sans-serif;
-            font-size: 19px;
-            font-weight: 600;
-            letter-spacing: .3px;
-            color: var(--text);
-        }
-
-        .icon-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255, 255, 255, 0.12);
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 17px;
-            cursor: pointer;
-        }
-
-        .icon-btn:active {
-            background: rgba(255, 255, 255, 0.22);
-        }
-
-        .icon-btn svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* ---------- Zona del reto ---------- */
-        .app-main {
-            position: fixed;
-            left: 0;
-            right: 0;
-            top: var(--header-h);
-            bottom: var(--footer-h);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .reto-stage {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px 26px;
-            min-height: 0;
+        .reto-container {
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
         }
 
         .reto-text {
-            font-size: clamp(32px, 7vw, 38px);
+            font-size: 24px;
             font-weight: 600;
-            line-height: 1.32;
-            text-align: center;
-            color: var(--text);
-            text-shadow: 0 3px 16px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.35);
+            line-height: 1.4;
+            color: white;
         }
 
-        .reto-text.pop {
-            animation: texto-pop .42s cubic-bezier(.22, 1.4, .36, 1);
-        }
-
-        @keyframes texto-pop {
-            0% { transform: scale(0.86); opacity: .6; }
-            55% { transform: scale(1.06); opacity: 1; }
-            100% { transform: scale(1); }
-        }
-
-        .hint {
-            flex: none;
-            text-align: center;
-            padding: 0 20px 14px;
-            font-size: 18px;
-            font-weight: 500;
-            color: var(--text);
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-            transition: opacity .15s ease;
-        }
-
-        .hint.oculto {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* ---------- Footer ---------- */
-        .app-footer {
+        .instruccion {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: var(--footer-h);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--muted-2);
-            background: rgba(10, 5, 28, 0.3);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            opacity: 0.7;
+            text-align: center;
+            padding: 0 20px;
         }
 
-        .version {
-            padding: 8px;
-            cursor: default;
-        }
-
-        /* ---------- Settings overlay ---------- */
+        /* ---------- Ajustes (ocultos; sin acceso visible salvo el gesto secreto) ---------- */
         .settings-overlay {
             position: fixed;
             inset: 0;
             z-index: 80;
-            background: rgba(5, 2, 18, 0.72);
+            background: rgba(0, 0, 0, 0.72);
             display: flex;
             align-items: flex-end;
             justify-content: center;
@@ -263,12 +87,12 @@
             max-height: 86vh;
             overflow-y: auto;
             touch-action: pan-y;
-            background: linear-gradient(180deg, #1c1140, #130a30);
+            background: #1e1e1e;
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-bottom: none;
-            border-radius: 26px 26px 0 0;
+            border-radius: 20px 20px 0 0;
             padding: 18px 20px 26px;
-            color: var(--text);
+            color: #fff;
         }
 
         .settings-header {
@@ -279,20 +103,31 @@
         }
 
         .settings-header h2 {
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 600;
+        }
+
+        .icon-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
         }
 
         .settings-grupo {
             padding: 14px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .settings-grupo h3 {
-            font-size: 13px;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: .5px;
-            color: var(--muted-2);
+            color: rgba(255, 255, 255, 0.5);
             margin-bottom: 10px;
         }
 
@@ -300,21 +135,21 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 9px 0;
-            font-size: 15.5px;
+            padding: 8px 0;
+            font-size: 14.5px;
         }
 
         .radio-fila {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 8px 0;
-            font-size: 14.5px;
+            padding: 7px 0;
+            font-size: 14px;
         }
 
         .secreto-nota {
-            font-size: 12.5px;
-            color: var(--muted-2);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
             margin-bottom: 8px;
         }
 
@@ -322,30 +157,22 @@
             width: 100%;
             margin-top: 6px;
             padding: 10px;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.14);
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text);
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
             font-family: inherit;
-            font-size: 14px;
+            font-size: 13px;
             resize: vertical;
             user-select: text;
             -webkit-user-select: text;
             touch-action: auto;
         }
 
-        .settings-footer-nota {
-            text-align: center;
-            font-size: 11.5px;
-            color: var(--muted-2);
-            padding-top: 14px;
-        }
-
-        /* Switch */
         .switch {
             position: relative;
-            width: 46px;
-            height: 27px;
+            width: 42px;
+            height: 24px;
             flex: none;
         }
 
@@ -358,7 +185,7 @@
         .slider {
             position: absolute;
             inset: 0;
-            background: rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 999px;
             transition: background .2s ease;
             cursor: pointer;
@@ -367,8 +194,8 @@
         .slider::before {
             content: "";
             position: absolute;
-            width: 21px;
-            height: 21px;
+            width: 18px;
+            height: 18px;
             left: 3px;
             top: 3px;
             background: #fff;
@@ -377,100 +204,52 @@
         }
 
         .switch input:checked + .slider {
-            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            background: #ff3d81;
         }
 
         .switch input:checked + .slider::before {
-            transform: translateX(19px);
+            transform: translateX(18px);
         }
     </style>
 </head>
 
 <body>
 
-    <div class="splash" id="splash">
-        <svg class="splash-logo" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="sbg" x1="0" y1="0" x2="192" y2="192" gradientUnits="userSpaceOnUse">
-                    <stop offset="0" stop-color="#ff3d81" />
-                    <stop offset="0.55" stop-color="#8b2bff" />
-                    <stop offset="1" stop-color="#2d12ff" />
-                </linearGradient>
-                <linearGradient id="sbolt" x1="60" y1="20" x2="140" y2="175" gradientUnits="userSpaceOnUse">
-                    <stop offset="0" stop-color="#fff6c8" />
-                    <stop offset="1" stop-color="#ffd23f" />
-                </linearGradient>
-            </defs>
-            <rect width="192" height="192" rx="42" fill="url(#sbg)" />
-            <path d="M106 18 L54 104 H88 L80 174 L140 82 H104 Z" fill="url(#sbolt)" stroke="#2d0a4e" stroke-width="4" stroke-linejoin="round" />
-        </svg>
-        <div class="splash-title">Challenger</div>
-        <div class="splash-sub">preparando tu próximo reto…</div>
+    <div class="reto-container">
+        <div class="reto-text" id="retoText">Mantén pulsado para randomizar</div>
     </div>
 
-    <div class="app" id="app">
+    <div class="instruccion" id="instruccion">Mantén pulsado en cualquier lugar de la pantalla</div>
 
-        <header class="app-header">
-            <div class="brand">
-                <svg class="brand-logo" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="192" height="192" rx="42" fill="url(#sbg)" />
-                    <path d="M106 18 L54 104 H88 L80 174 L140 82 H104 Z" fill="url(#sbolt)" stroke="#2d0a4e" stroke-width="4" stroke-linejoin="round" />
-                </svg>
-                <span class="brand-name">Challenger</span>
+    <div class="settings-overlay no-gesture oculto" id="settingsOverlay">
+        <div class="settings-panel">
+            <div class="settings-header">
+                <h2>Ajustes</h2>
+                <button type="button" class="icon-btn" id="btnCerrarAjustes" aria-label="Cerrar ajustes">✕</button>
             </div>
-            <button type="button" class="icon-btn no-gesture" id="btnSettings" aria-label="Ajustes">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                </svg>
-            </button>
-        </header>
 
-        <main class="app-main">
-            <div class="reto-stage">
-                <p class="reto-text" id="retoText"></p>
+            <div class="settings-grupo" style="border-top:none; padding-top:0;">
+                <div class="settings-fila">
+                    <span>Sonido</span>
+                    <label class="switch"><input type="checkbox" id="toggleSonido"><span class="slider"></span></label>
+                </div>
+                <div class="settings-fila">
+                    <span>Vibración</span>
+                    <label class="switch"><input type="checkbox" id="toggleVibracion"><span class="slider"></span></label>
+                </div>
             </div>
-            <p class="hint" id="hintText">Mantén pulsado para lanzar un reto</p>
-        </main>
 
-        <footer class="app-footer">
-            <span class="version no-gesture" id="versionTap">v2.4.1</span>
-            <span>· © Challenger Labs</span>
-        </footer>
-
-        <div class="settings-overlay no-gesture oculto" id="settingsOverlay">
-            <div class="settings-panel">
-                <div class="settings-header">
-                    <h2>Ajustes</h2>
-                    <button type="button" class="icon-btn" id="btnCerrarAjustes" aria-label="Cerrar ajustes">✕</button>
-                </div>
-
-                <div class="settings-grupo" style="border-top:none; padding-top:0;">
-                    <div class="settings-fila">
-                        <span>Sonido</span>
-                        <label class="switch"><input type="checkbox" id="toggleSonido"><span class="slider"></span></label>
-                    </div>
-                    <div class="settings-fila">
-                        <span>Vibración</span>
-                        <label class="switch"><input type="checkbox" id="toggleVibracion"><span class="slider"></span></label>
-                    </div>
-                </div>
-
-                <div class="settings-grupo" id="secretoGrupo" hidden>
-                    <h3>Reto especial</h3>
-                    <p class="secreto-nota">Puede aparecer en momentos muy concretos de la noche. Elige cuál.</p>
-                    <label class="radio-fila"><input type="radio" name="trucoPreset" value="0"><span>Besar a la persona que se te indique</span></label>
-                    <label class="radio-fila"><input type="radio" name="trucoPreset" value="1"><span>Dar un beso a la persona que te indiquen (sí, a esa)</span></label>
-                    <label class="radio-fila"><input type="radio" name="trucoPreset" value="2"><span>Intercambiar el nombre con la persona que te indiquen el resto de la noche</span></label>
-                    <label class="radio-fila"><input type="radio" name="trucoPreset" value="3"><span>Pedirle el número a la persona que te indiquen con la excusa más mala posible</span></label>
-                    <label class="radio-fila"><input type="radio" name="trucoPreset" value="custom"><span>Personalizado:</span></label>
-                    <textarea id="trucoCustomTexto" rows="2" placeholder="Escribe tu propio reto especial…"></textarea>
-                </div>
-
-                <p class="settings-footer-nota">Challenger v2.4.1 — © Challenger Labs</p>
+            <div class="settings-grupo">
+                <h3>Reto especial</h3>
+                <p class="secreto-nota">Puede aparecer en momentos muy concretos de la noche. Elige cuál.</p>
+                <label class="radio-fila"><input type="radio" name="trucoPreset" value="0"><span>Besar a la persona que se te indique</span></label>
+                <label class="radio-fila"><input type="radio" name="trucoPreset" value="1"><span>Dar un beso a la persona que te indiquen (sí, a esa)</span></label>
+                <label class="radio-fila"><input type="radio" name="trucoPreset" value="2"><span>Intercambiar el nombre con la persona que te indiquen el resto de la noche</span></label>
+                <label class="radio-fila"><input type="radio" name="trucoPreset" value="3"><span>Pedirle el número a la persona que te indiquen con la excusa más mala posible</span></label>
+                <label class="radio-fila"><input type="radio" name="trucoPreset" value="custom"><span>Personalizado:</span></label>
+                <textarea id="trucoCustomTexto" rows="2" placeholder="Escribe tu propio reto especial…"></textarea>
             </div>
         </div>
-
     </div>
 
     <script>
@@ -621,7 +400,8 @@
             } catch (e) { /* almacenamiento no disponible: seguimos sin persistir */ }
         }
 
-        let ajustes = cargarJSON('challengerAjustes', { sonido: true, vibracion: true });
+        // Por defecto: vibración activada, sonido desactivado
+        let ajustes = cargarJSON('challengerAjustes', { sonido: false, vibracion: true });
         let truco = cargarJSON('challengerTruco', { preset: '0', custom: '' });
 
         function textoTrucadoActual() {
@@ -635,28 +415,16 @@
         // ---------------------------------------------------------------
         // Referencias DOM
         // ---------------------------------------------------------------
-        const splash = document.getElementById('splash');
         const retoText = document.getElementById('retoText');
-        const hintText = document.getElementById('hintText');
-        const versionTap = document.getElementById('versionTap');
-        const btnSettings = document.getElementById('btnSettings');
+        const instruccion = document.getElementById('instruccion');
         const btnCerrarAjustes = document.getElementById('btnCerrarAjustes');
         const settingsOverlay = document.getElementById('settingsOverlay');
         const toggleSonido = document.getElementById('toggleSonido');
         const toggleVibracion = document.getElementById('toggleVibracion');
-        const secretoGrupo = document.getElementById('secretoGrupo');
         const trucoCustomTexto = document.getElementById('trucoCustomTexto');
 
         // ---------------------------------------------------------------
-        // Splash: 1s y fuera
-        // ---------------------------------------------------------------
-        setTimeout(() => {
-            splash.classList.add('splash-oculto');
-            setTimeout(() => { splash.style.display = 'none'; }, 400);
-        }, 1000);
-
-        // ---------------------------------------------------------------
-        // Randomizador
+        // Randomizador (igual que el original: cada 100ms mientras se mantiene pulsado)
         // ---------------------------------------------------------------
         let isRandomizing = false;
         let randomInterval;
@@ -664,7 +432,6 @@
         let currentColorIndex = -1;
         let trucazoActivado = false;
         let modalAbierto = false;
-        let yaHuboReto = false;
 
         // Color inicial, igual que en la versión original de la app
         document.body.style.backgroundColor = COLORES[0];
@@ -700,8 +467,7 @@
         function iniciarRandomizacion() {
             if (isRandomizing || modalAbierto) return;
             isRandomizing = true;
-            hintText.classList.add('oculto');
-            randomInterval = setInterval(pintarTick, 90);
+            randomInterval = setInterval(pintarTick, 100);
         }
 
         function detenerRandomizacion() {
@@ -720,15 +486,8 @@
             retoText.textContent = retoFinal;
             document.body.style.backgroundColor = elegirColor();
 
-            retoText.classList.add('pop');
-            setTimeout(() => retoText.classList.remove('pop'), 420);
-
             vibrar([25, 45, 25]);
             beep();
-
-            yaHuboReto = true;
-            hintText.textContent = 'Mantén pulsado para el siguiente reto';
-            hintText.classList.remove('oculto');
         }
 
         // ---------------------------------------------------------------
@@ -761,35 +520,69 @@
         }
 
         // ---------------------------------------------------------------
-        // Gesto global: mantener pulsado en cualquier parte = randomizar
-        // (incluida la cabecera). Excepciones: controles con .no-gesture.
-        // Trucos: zona superior 25% y mantener con dos dedos.
+        // Gesto global: mantener pulsado en cualquier parte = randomizar.
+        // Trucos invisibles: zona superior 25%, mantener con dos dedos, y
+        // 5 toques cortos y seguidos sobre la instrucción = ajustes.
         // ---------------------------------------------------------------
         function esControlInteractivo(target) {
             return !!(target && target.closest && target.closest('.no-gesture'));
         }
 
-        document.addEventListener('mousedown', (e) => {
-            if (esControlInteractivo(e.target)) return;
-            if (estaEnZonaTruco(e.clientY)) trucazoActivado = true;
+        let pressTimer = null;
+        let pressOnInstruccion = false;
+        let pressTimerFired = false;
+
+        function iniciarPulsacion(clientY, target, multiTouch) {
+            if (esControlInteractivo(target)) return;
+
+            if (target && target.closest && target.closest('.instruccion')) {
+                // Pulsación sobre la instrucción: si es corta (<150ms) cuenta
+                // como toque para el ajuste oculto y nunca arranca el
+                // randomizador de forma visible; si se mantiene, funciona
+                // como cualquier otro punto de la pantalla.
+                pressOnInstruccion = true;
+                pressTimerFired = false;
+                pressTimer = setTimeout(() => {
+                    pressTimerFired = true;
+                    if (estaEnZonaTruco(clientY)) trucazoActivado = true;
+                    if (multiTouch) trucazoActivado = true;
+                    iniciarRandomizacion();
+                }, 150);
+                return;
+            }
+
+            if (estaEnZonaTruco(clientY)) trucazoActivado = true;
+            if (multiTouch) trucazoActivado = true;
             iniciarRandomizacion();
+        }
+
+        function finalizarPulsacion() {
+            if (pressOnInstruccion) {
+                clearTimeout(pressTimer);
+                const seRandomizo = pressTimerFired;
+                pressOnInstruccion = false;
+                pressTimerFired = false;
+                if (seRandomizo) {
+                    detenerRandomizacion();
+                } else {
+                    registrarToqueInstruccion();
+                }
+                return;
+            }
+            if (isRandomizing) detenerRandomizacion();
+        }
+
+        document.addEventListener('mousedown', (e) => {
+            iniciarPulsacion(e.clientY, e.target, false);
         });
 
-        document.addEventListener('mouseup', () => {
-            if (isRandomizing) detenerRandomizacion();
-        });
-
-        document.addEventListener('mouseleave', () => {
-            if (isRandomizing) detenerRandomizacion();
-        });
+        document.addEventListener('mouseup', finalizarPulsacion);
+        document.addEventListener('mouseleave', finalizarPulsacion);
 
         document.addEventListener('touchstart', (e) => {
-            if (esControlInteractivo(e.target)) return;
-            e.preventDefault();
+            if (!esControlInteractivo(e.target)) e.preventDefault();
             const t = e.touches[0];
-            if (t && estaEnZonaTruco(t.clientY)) trucazoActivado = true;
-            if (e.touches.length >= 2) trucazoActivado = true; // segundo disparador: dos dedos
-            iniciarRandomizacion();
+            iniciarPulsacion(t ? t.clientY : 0, e.target, e.touches.length >= 2);
         }, { passive: false });
 
         document.addEventListener('touchmove', (e) => {
@@ -797,18 +590,17 @@
         }, { passive: false });
 
         document.addEventListener('touchend', (e) => {
-            if (esControlInteractivo(e.target) && !isRandomizing) return;
-            if (e.touches.length === 0) detenerRandomizacion();
+            if (e.touches.length === 0) finalizarPulsacion();
         }, { passive: false });
 
         document.addEventListener('touchcancel', (e) => {
-            if (e.touches.length === 0) detenerRandomizacion();
+            if (e.touches.length === 0) finalizarPulsacion();
         }, { passive: false });
 
         document.addEventListener('contextmenu', (e) => e.preventDefault());
 
         // ---------------------------------------------------------------
-        // Ajustes
+        // Ajustes (sin acceso visible: solo vía el gesto secreto)
         // ---------------------------------------------------------------
         function abrirAjustes() {
             toggleSonido.checked = ajustes.sonido;
@@ -825,7 +617,6 @@
             modalAbierto = false;
         }
 
-        btnSettings.addEventListener('click', abrirAjustes);
         btnCerrarAjustes.addEventListener('click', cerrarAjustes);
         settingsOverlay.addEventListener('click', (e) => {
             if (e.target === settingsOverlay) cerrarAjustes();
@@ -855,22 +646,20 @@
         });
 
         // ---------------------------------------------------------------
-        // Ajuste oculto: 5 toques seguidos sobre la versión del pie
+        // Ajuste oculto: 5 toques cortos y seguidos sobre la instrucción
         // ---------------------------------------------------------------
-        let tapsVersion = 0;
-        let tapsVersionTimer = null;
-        versionTap.addEventListener('click', () => {
-            tapsVersion++;
-            clearTimeout(tapsVersionTimer);
-            tapsVersionTimer = setTimeout(() => { tapsVersion = 0; }, 1500);
-            if (tapsVersion >= 5) {
-                tapsVersion = 0;
-                clearTimeout(tapsVersionTimer);
+        let tapsInstruccion = 0;
+        let tapsInstruccionTimer = null;
+        function registrarToqueInstruccion() {
+            tapsInstruccion++;
+            clearTimeout(tapsInstruccionTimer);
+            tapsInstruccionTimer = setTimeout(() => { tapsInstruccion = 0; }, 1500);
+            if (tapsInstruccion >= 5) {
+                tapsInstruccion = 0;
+                clearTimeout(tapsInstruccionTimer);
                 abrirAjustes();
-                secretoGrupo.hidden = false;
-                setTimeout(() => secretoGrupo.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
             }
-        });
+        }
     </script>
 </body>
 
